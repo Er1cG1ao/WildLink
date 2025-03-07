@@ -10,10 +10,10 @@ export default function SelectLeftRight() {
     const router = useRouter(); // Next.js router for navigation
 
     return (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center text-white text-2xl">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center text-white text-2xl overflow-hidden">
             {/* 🔹 Back Button (Top-Left Corner) */}
             <button
-                className="absolute top-3 left-3 w-12 h-12 border border-white bg-opacity-50 text-white text-lg rounded-full flex items-center justify-center hover:bg-opacity-70 transition"
+                className="absolute top-5 left-5 w-12 h-12 bg-white bg-opacity-20 text-white text-lg rounded-full flex items-center border border-white justify-center hover:bg-opacity-70 transition"
                 onClick={() => router.push("/about")} // Navigate back to About page
             >
                 ⬅

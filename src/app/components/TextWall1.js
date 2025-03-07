@@ -16,18 +16,18 @@ export default function TextWall1({ onClose }) {
 
     return (
         <div
-            className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50"
+            className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50 overflow-hidden"
             onClick={onClose} // Click outside to close
         >
-            {/* 🔹 Background Image (StandardBG.png) */}
+            {/* 🔹 Non-Scrollable Background Image */}
             <Image
                 src="/StandardBG.svg" // Ensure StandardBG.png is in /public/
                 alt="Background"
                 fill
-                className="object-contain pointer-events-none"
+                className="object-contain pointer-events-none fixed"
             />
 
-            {/* 📜 Transparent, Taller Scrollable Text Block */}
+            {/* 📜 Scrollable Transparent Text Block */}
             <div
                 className="absolute w-[80vw] max-w-[350px] h-[60vh] bg-transparent p-6 overflow-y-auto text-white border border-white rounded-lg"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside

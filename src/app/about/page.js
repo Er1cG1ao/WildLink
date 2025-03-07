@@ -32,7 +32,7 @@ export default function About() {
     }, []);
 
     return (
-        <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center overflow-hidden">
             {/* 🔹 Show Video Carousel & Sliding.png only when Scanner and TextWall2 are NOT visible */}
             {!showScanner && !showTextWall2 && (
                 <>
