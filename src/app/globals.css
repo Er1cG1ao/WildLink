@@ -16,8 +16,11 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  /*background: var(--background);*/
   font-family: Arial, Helvetica, sans-serif;
+  /* Apply a gradient background to the entire app */
+  background: linear-gradient(to bottom, #2E7986, #AEDFFE);
+  min-height: 100vh;
 }
 @keyframes fast-gif {
   0% { transform: scale(1); }

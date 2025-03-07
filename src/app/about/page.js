@@ -14,7 +14,7 @@ export default function About() {
     const [opacity, setOpacity] = useState(1);
     const [isVisible, setIsVisible] = useState(true);
     const [showScanner, setShowScanner] = useState(false);
-    const [showTextWall2, setShowTextWall2] = useState(false); // State for TextWall2
+    const [showTextWall2, setShowTextWall2] = useState(false); // Controls TextWall2 visibility
 
     useEffect(() => {
         const fadeTimer = setTimeout(() => {
@@ -32,49 +32,54 @@ export default function About() {
     }, []);
 
     return (
-        <div className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
-            {/* 🔹 Swiper GIF Carousel */}
-            <Swiper
-                spaceBetween={10}
-                slidesPerView={1}
-                loop={true}
-                autoplay={{ delay: 5000, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
-                navigation={true}
-                modules={[Autoplay, Pagination, Navigation]}
-                className="absolute w-full h-full z-10"
-            >
-                <SwiperSlide>
-                    <Image
-                        src="/remV1.gif"
-                        alt="GIF 1"
-                        fill
-                        className="object-contain cursor-pointer"
-                        unoptimized
-                        onClick={() => setShowScanner(true)} // Open Scanner when clicked
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image
-                        src="/remV2.gif"
-                        alt="GIF 2"
-                        fill
-                        className="object-contain cursor-pointer"
-                        unoptimized
-                        onClick={() => setShowTextWall2(true)} // Open TextWall2 when clicked
-                    />
-                </SwiperSlide>
-            </Swiper>
+        <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+            {/* 🔹 Show Video Carousel & Sliding.png only when Scanner and TextWall2 are NOT visible */}
+            {!showScanner && !showTextWall2 && (
+                <>
+                    {/* 🔹 Swiper Video Carousel */}
+                    <Swiper
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        loop={true}
+                        autoplay={{ delay: 5000, disableOnInteraction: false }}
+                        pagination={{ clickable: true }}
+                        navigation={true}
+                        modules={[Autoplay, Pagination, Navigation]}
+                        className="absolute w-full h-full z-10"
+                    >
+                        <SwiperSlide>
+                            <Image
+                                src="/remV1.gif"
+                                alt="GIF 1"
+                                fill
+                                className="object-contain cursor-pointer"
+                                unoptimized
+                                onClick={() => setShowScanner(true)} // Open Scanner
+                            />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <Image
+                                src="/remV2.gif"
+                                alt="GIF 2"
+                                fill
+                                className="object-contain cursor-pointer"
+                                unoptimized
+                                onClick={() => setShowTextWall2(true)} // Open TextWall2
+                            />
+                        </SwiperSlide>
+                    </Swiper>
 
-            {/* 🔹 Sliding Image Overlay */}
-            <div className="absolute w-full h-full flex items-center justify-center pointer-events-none z-0">
-                <Image
-                    src="/Sliding.png"
-                    alt="Sliding Foreground"
-                    fill
-                    className="object-contain"
-                />
-            </div>
+                    {/* 🔹 Sliding Image Overlay */}
+                    <div className="absolute w-full h-full flex items-center justify-center pointer-events-none z-0">
+                        <Image
+                            src="/Sliding.png"
+                            alt="Sliding Foreground"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                </>
+            )}
 
             {/* 🔹 Entry Image (Fades Out) */}
             {isVisible && (
