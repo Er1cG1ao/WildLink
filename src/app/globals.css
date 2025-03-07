@@ -31,3 +31,11 @@ body {
 .fast-gif {
   animation: fast-gif 0.3s infinite linear; /* Faster loop */
 }
+/* Prevent scrolling on all pages */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  touch-action: none; /* Prevent touch scrolling */
+}
