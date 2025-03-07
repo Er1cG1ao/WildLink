@@ -72,7 +72,7 @@ export default function About() {
                     {/* 🔹 Sliding Image Overlay */}
                     <div className="absolute w-full h-full flex items-center justify-center pointer-events-none z-0">
                         <Image
-                            src="/Sliding.png"
+                            src="/Sliding.svg"
                             alt="Sliding Foreground"
                             fill
                             className="object-contain"

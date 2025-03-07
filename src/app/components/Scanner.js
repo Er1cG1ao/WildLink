@@ -50,7 +50,7 @@ export default function Scanner({ onClose }) {
         >
             {/* 🔹 Scanner UI (Scan.png as Full-Screen Background) */}
             <Image
-                src="/Scan.png" // Ensure Scan.png is in /public/
+                src="/Scan.svg" // Ensure Scan.png is in /public/
                 alt="Scanner Interface"
                 fill
                 className="object-contain pointer-events-none"

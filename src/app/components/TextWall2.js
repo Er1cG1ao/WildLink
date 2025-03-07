@@ -21,7 +21,7 @@ export default function TextWall2({ onClose }) {
         >
             {/* 🔹 Background Image (StandardBG.png) */}
             <Image
-                src="/StandardBG.png" // Ensure StandardBG.png is in /public/
+                src="/StandardBG.svg" // Ensure StandardBG.png is in /public/
                 alt="Background"
                 fill
                 className="object-contain pointer-events-none"
