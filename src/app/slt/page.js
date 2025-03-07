@@ -1,44 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import router for navigation
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import TextWall1 from "@/app/components/TextWall1"; // Import TextWall1
+import TextWall1 from "@/app/components/TextWall1";
 
 export default function SelectLeftRight() {
-    const [showTextWall1, setShowTextWall1] = useState(false); // State to control TextWall1 visibility
-    const router = useRouter(); // Next.js router for navigation
+    const [showTextWall1, setShowTextWall1] = useState(false);
+    const router = useRouter();
 
     return (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center text-white text-2xl overflow-hidden">
+        <div className="fixed inset-0 flex items-center justify-center text-white text-2xl overflow-hidden">
             {/* 🔹 Back Button (Top-Left Corner) */}
             <button
-                className="absolute top-5 left-5 w-12 h-12 bg-white bg-opacity-20 text-white text-lg rounded-full flex items-center border border-white justify-center hover:bg-opacity-70 transition"
-                onClick={() => router.push("/about")} // Navigate back to About page
+                className="absolute top-5 left-5 w-12 h-12 bg-white bg-opacity-20 text-white border border-white text-lg rounded-full flex items-center justify-center hover:bg-opacity-70 transition"
+                onClick={() => router.push("/about")}
             >
                 ⬅
             </button>
 
-            {/* 🔹 Show Background Image & Buttons only when TextWall1 is NOT visible */}
+            {/* 🔹 Background Image & Buttons (Hide When TextWall1 is Open) */}
             {!showTextWall1 && (
                 <>
-                    {/* 🔹 Background Image (select.png with object-contain) */}
                     <Image
-                        src="/select.svg" // Ensure select.png is in /public/
+                        src="/select.svg"
                         alt="Select Page Background"
                         fill
                         className="object-contain pointer-events-none"
                     />
 
-                    {/* 🔹 Large Transparent Left/Right Buttons */}
+                    {/* 🔹 Large Transparent Buttons */}
                     <div className="absolute flex gap-5 bottom-[10vh]">
-                        {/* 🔵 Left Button - Show Alert */}
                         <button
                             className="px-32 py-48 bg-transparent cursor-pointer"
                             onClick={() => alert("Still under development!")}
                         ></button>
 
-                        {/* 🟢 Right Button - Show TextWall1 */}
                         <button
                             className="px-32 py-48 bg-transparent cursor-pointer"
                             onClick={() => setShowTextWall1(true)}
@@ -47,7 +44,7 @@ export default function SelectLeftRight() {
                 </>
             )}
 
-            {/* 🔹 TextWall1 Component (Only visible when showTextWall1 is true) */}
+            {/* 🔹 TextWall1 Component */}
             {showTextWall1 && <TextWall1 onClose={() => setShowTextWall1(false)} />}
         </div>
     );
