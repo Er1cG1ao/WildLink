@@ -33,51 +33,53 @@ export default function About() {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
-            {/* 🔹 Ensure Background Fits Exactly to Screen Without Scrolling */}
-            <div className="absolute top-0 left-0 w-full h-full">
+            {/* 🔹 Background Wrapper (Ensure Fullscreen) */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 {!showScanner && !showTextWall2 && (
                     <>
-                        {/* 🔹 Swiper Video Carousel */}
-                        <Swiper
-                            spaceBetween={10}
-                            slidesPerView={1}
-                            loop={true}
-                            autoplay={{ delay: 5000, disableOnInteraction: false }}
-                            pagination={{ clickable: true }}
-                            navigation={true}
-                            modules={[Autoplay, Pagination, Navigation]}
-                            className="absolute w-full h-full z-10"
-                        >
-                            <SwiperSlide>
-                                <Image
-                                    src="/remV1.gif"
-                                    alt="GIF 1"
-                                    fill
-                                    className="object-contain cursor-pointer"
-                                    unoptimized
-                                    onClick={() => setShowScanner(true)}
-                                />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <Image
-                                    src="/remV2.gif"
-                                    alt="GIF 2"
-                                    fill
-                                    className="object-contain cursor-pointer"
-                                    unoptimized
-                                    onClick={() => setShowTextWall2(true)}
-                                />
-                            </SwiperSlide>
-                        </Swiper>
-
-                        {/* 🔹 Sliding Image Overlay */}
-                        <div className="absolute w-full h-full flex items-center justify-center pointer-events-none z-0">
+                        {/* 🔹 Sliding Image (Background - Behind Everything) */}
+                        <div className="absolute top-0 left-0 w-full h-full z-0 flex items-center justify-center">
                             <Image
                                 src="/Sliding.svg"
                                 alt="Sliding Foreground"
                                 fill
                                 className="object-contain"
                             />
+                        </div>
+
+                        {/* 🔹 Swiper Video Carousel (Set Above Sliding.png & Interactive) */}
+                        <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
+                            <Swiper
+                                spaceBetween={10}
+                                slidesPerView={1}
+                                loop={true}
+                                autoplay={{ delay: 5000, disableOnInteraction: false }}
+                                pagination={{ clickable: true }}
+                                navigation={true}
+                                modules={[Autoplay, Pagination, Navigation]}
+                                className="w-full h-full"
+                            >
+                                <SwiperSlide>
+                                    <Image
+                                        src="/remV1.gif"
+                                        alt="GIF 1"
+                                        fill
+                                        className="object-contain cursor-pointer"
+                                        unoptimized
+                                        onClick={() => setShowScanner(true)}
+                                    />
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <Image
+                                        src="/remV2.gif"
+                                        alt="GIF 2"
+                                        fill
+                                        className="object-contain cursor-pointer"
+                                        unoptimized
+                                        onClick={() => setShowTextWall2(true)}
+                                    />
+                                </SwiperSlide>
+                            </Swiper>
                         </div>
                     </>
                 )}
@@ -86,7 +88,7 @@ export default function About() {
             {/* 🔹 Entry Image (Fades Out) */}
             {isVisible && (
                 <Image
-                    src="/entryImg.png"
+                    src="/entryImg.svg"
                     alt="Wild Link"
                     fill
                     className="absolute z-50 transition-opacity duration-700 object-contain"
