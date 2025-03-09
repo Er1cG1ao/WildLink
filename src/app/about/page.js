@@ -9,19 +9,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import Head from "next/head";
 
-export default function App({ Component, pageProps }) {
-    return (
-        <>
-            <Head>
-                <link rel="preload" href="/remV1.gif" as="image" type="image/gif" />
-                <link rel="preload" href="/remV2.gif" as="image" type="image/gif" />
-            </Head>
-            <Component {...pageProps} />
-        </>
-    );
-}
 
 export default function About() {
     const [opacity, setOpacity] = useState(1);
