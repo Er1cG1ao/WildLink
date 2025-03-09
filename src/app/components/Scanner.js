@@ -78,26 +78,37 @@ export default function Scanner({ onClose }) {
     }
 
     function stopScanner() {
-    if (html5QrCodeInstance.current) {
-        console.log("Stopping QR Scanner...");
-        html5QrCodeInstance.current
-            .stop()
-            .then(() => {
-                console.log("QR Scanner stopped.");
-                html5QrCodeInstance.current = null; // Reset instance after stopping
-            })
-            .catch((err) => console.error("Error stopping scanner:", err));
+        if (html5QrCodeInstance.current) {
+            console.log("Stopping QR Scanner...");
+
+            html5QrCodeInstance.current
+                .stop()
+                .then(() => {
+                    console.log("QR Scanner stopped.");
+                    html5QrCodeInstance.current = null; // Reset scanner instance
+                    setIsScanning(false);
+                })
+                .catch((err) => {
+                    console.error("Error stopping scanner:", err);
+                });
+        } else {
+            console.warn("Scanner is already stopped or not initialized.");
+            setIsScanning(false);
+        }
     }
-    setIsScanning(false); // Ensure UI updates correctly
-}
+
+    useEffect(() => {
+        return () => {
+            if (isScanning) {
+                stopScanner(); // Only stop if scanning was active
+            }
+        };
+    }, [isScanning]);
 
     return (
         <div
             className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50"
-            onClick={() => {
-                stopScanner(); // Ensure the scanner stops before closing
-                onClose();
-            }}
+            onClick={!isScanning ? () => onClose() : undefined}
         >
             <Image
                 src="/Scan.svg"
@@ -127,8 +138,22 @@ export default function Scanner({ onClose }) {
                 <div id="qr-reader" className={`w-full h-full ${isScanning ? '' : 'hidden'}`}></div>
             </div>
 
+            {/* Cancel Button (Only Show When Scanning) */}
+            {isScanning && (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        stopScanner();
+                    }}
+            className="absolute bottom-[10vh] px-8 py-4 bg-gray-400 text-white text-lg rounded-md font-shs"
+                >
+                    Cancel
+                </button>
+            )}
+
             {/* Instruction Text */}
-            <div className="absolute top-[30%] left-0 w-full flex flex-col items-center text-center text-white z-30 px-6">
+            <div
+                className="absolute top-[30%] left-0 w-full flex flex-col items-center text-center text-white z-30 px-6">
                 <p className="font-shs text-xl mb-0">点击并扫描手链背面二维码</p>
                 <p className="font-shs text-xl mb-0">与你的海洋生物互动并获取更多信息</p>
                 <p className="font-shs text-sm mb-0">Click and scan the QR code on the back of the bracelet</p>
