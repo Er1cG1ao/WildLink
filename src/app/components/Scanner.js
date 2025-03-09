@@ -8,6 +8,7 @@ import Image from "next/image";
 export default function Scanner({ onClose }) {
     const router = useRouter();
     const [isScanning, setIsScanning] = useState(false);
+    let html5QrCodeInstance = null;
 
     useEffect(() => {
         const handleEscape = (event) => {
@@ -34,7 +35,12 @@ export default function Scanner({ onClose }) {
                 alert("Please allow camera access to scan QR codes.");
             });
 
-        return () => console.log("Stopping QR Scanner...");
+        return () => {
+            if (html5QrCodeInstance) {
+                console.log("Stopping QR Scanner...");
+                html5QrCodeInstance.stop().catch(err => console.error("Error stopping scanner:", err));
+            }
+        };
     }, [isScanning]);
 
     function startScanner() {
@@ -46,12 +52,12 @@ export default function Scanner({ onClose }) {
             return;
         }
 
-        const html5QrCode = new Html5Qrcode("qr-reader");
+        html5QrCodeInstance = new Html5Qrcode("qr-reader");
 
-        html5QrCode.start(
+        html5QrCodeInstance.start(
             { facingMode: "environment" }, // Use back camera
             {
-                fps: 10,
+                fps: 2, // Reduced from 10 to slow down polling rate
                 qrbox: { width: 250, height: 250 },
             },
             (decodedText) => {
@@ -60,7 +66,7 @@ export default function Scanner({ onClose }) {
                     sessionStorage.setItem("scannedQR", decodedText);
                     router.push("/slt");
                 } else {
-                    alert("Invalid QR Code. Try again!");
+                    // alert("Invalid QR Code. Try again!");
                 }
             },
             (error) => {

@@ -14,7 +14,7 @@ export default function SelectLeftRight() {
             {/* 🔹 Back Button (Top-Left Corner) */}
             <button
                 className="absolute top-5 left-5 w-12 h-12 bg-white bg-opacity-20 text-white border border-white text-lg rounded-full flex items-center justify-center hover:bg-opacity-70 transition"
-                onClick={() => router.push("/about")}
+                onClick={() => router.push("/")}
             >
                 ⬅
             </button>
