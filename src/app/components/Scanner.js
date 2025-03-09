@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -8,11 +8,12 @@ import Image from "next/image";
 export default function Scanner({ onClose }) {
     const router = useRouter();
     const [isScanning, setIsScanning] = useState(false);
-    let html5QrCodeInstance = null;
+    const html5QrCodeInstance = useRef(null);
 
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === "Escape") {
+                stopScanner();
                 onClose();
             }
         };
@@ -21,7 +22,7 @@ export default function Scanner({ onClose }) {
     }, [onClose]);
 
     useEffect(() => {
-        if (!isScanning) return; // Only proceed if scanning is enabled
+        if (!isScanning) return;
 
         console.log("Requesting Camera Permissions...");
         navigator.mediaDevices
@@ -33,14 +34,10 @@ export default function Scanner({ onClose }) {
             .catch((err) => {
                 console.error("Camera permission denied:", err);
                 alert("Please allow camera access to scan QR codes.");
+                setIsScanning(false);
             });
 
-        return () => {
-            if (html5QrCodeInstance) {
-                console.log("Stopping QR Scanner...");
-                html5QrCodeInstance.stop().catch(err => console.error("Error stopping scanner:", err));
-            }
-        };
+        return () => stopScanner();
     }, [isScanning]);
 
     function startScanner() {
@@ -52,37 +49,56 @@ export default function Scanner({ onClose }) {
             return;
         }
 
-        html5QrCodeInstance = new Html5Qrcode("qr-reader");
+        if (!html5QrCodeInstance.current) {
+            html5QrCodeInstance.current = new Html5Qrcode("qr-reader");
+        }
 
-        html5QrCodeInstance.start(
+        html5QrCodeInstance.current.start(
             { facingMode: "environment" }, // Use back camera
             {
-                fps: 2, // Reduced from 10 to slow down polling rate
+                fps: 2,
                 qrbox: { width: 250, height: 250 },
             },
-            (decodedText) => {
-                console.log("Scanned QR Code:", decodedText);
-                if (decodedText === "wangshenyushishabi") {
-                    sessionStorage.setItem("scannedQR", decodedText);
-                    router.push("/slt");
-                } else {
-                    // alert("Invalid QR Code. Try again!");
-                }
-            },
+        (decodedText) => {
+            console.log("Scanned QR Code:", decodedText);
+            if (decodedText === "wangshenyushishabi") {
+                sessionStorage.setItem("scannedQR", decodedText);
+                stopScanner(); // Stop scanning immediately after detection
+                router.push("/slt");
+            }
+        },
             (error) => {
                 console.warn("QR Scan Error:", error);
             }
         ).catch((err) => {
             console.error("Camera initialization failed:", err);
             alert("Failed to access camera. Please check permissions.");
+            setIsScanning(false);
         });
     }
 
+    function stopScanner() {
+    if (html5QrCodeInstance.current) {
+        console.log("Stopping QR Scanner...");
+        html5QrCodeInstance.current
+            .stop()
+            .then(() => {
+                console.log("QR Scanner stopped.");
+                html5QrCodeInstance.current = null; // Reset instance after stopping
+            })
+            .catch((err) => console.error("Error stopping scanner:", err));
+    }
+    setIsScanning(false); // Ensure UI updates correctly
+}
+
     return (
-        <div className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50"
-             onClick={onClose}
+        <div
+            className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50"
+            onClick={() => {
+                stopScanner(); // Ensure the scanner stops before closing
+                onClose();
+            }}
         >
-            {/* 🔹 Scanner Background Image */}
             <Image
                 src="/Scan.svg"
                 alt="Scanner Interface"
@@ -92,23 +108,26 @@ export default function Scanner({ onClose }) {
 
             {/* Start Scanning Button */}
             {!isScanning && (
-            <button
-                onClick={(e) => {
-                    e.stopPropagation(); // Prevent closing when clicking the button
-                    setIsScanning(true); // Start scanning
-                }}
-                className="absolute bottom-[10vh] px-4 py-2 bg-blue-500 text-white rounded-md"
-            >
-                test
-            </button>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsScanning(true);
+                    }}
+                    className="absolute bottom-[20vh] px-24 py-24 z-10 bg-transparent text-white text-xl rounded-md"
+                >
+                    Scan
+                </button>
             )}
 
-            {/* 🔲 QR Scanner Area */}
-            <div className="absolute bottom-[20vh] w-[50vw] h-[30vh] max-w-48 max-h-48 min-w-16 min-h-16 bg-transparent">
+            {/* QR Scanner Area */}
+            <div
+                className="absolute bottom-[20vh] w-[50vw] h-[30vh] max-w-48 max-h-48 min-w-16 min-h-16 bg-transparent"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div id="qr-reader" className={`w-full h-full ${isScanning ? '' : 'hidden'}`}></div>
             </div>
 
-            {/* 🔹 Instruction Text */}
+            {/* Instruction Text */}
             <div className="absolute top-[30%] left-0 w-full flex flex-col items-center text-center text-white z-30 px-6">
                 <p className="font-shs text-xl mb-0">点击并扫描手链背面二维码</p>
                 <p className="font-shs text-xl mb-0">与你的海洋生物互动并获取更多信息</p>

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 
-export default function TextWall1({ onClose }) {
+export default function TextWall2({ onClose }) {
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === "Escape") {
@@ -19,17 +19,11 @@ export default function TextWall1({ onClose }) {
             className="fixed top-0 left-0 w-full h-full bg-opacity-90 flex items-center justify-center z-50 overflow-hidden"
             onClick={onClose} // Click outside to close
         >
-            {/* 🔹 Non-Scrollable Background Image */}
-            <Image
-                src="/StandardBG.svg" // Ensure StandardBG.png is in /public/
-                alt="Background"
-                fill
-                className="object-contain pointer-events-none fixed"
-            />
+
 
             {/* 📜 Scrollable Transparent Text Block */}
             <div
-                className="absolute w-[80vw] max-w-[350px] h-[50vh] bg-transparent p-6 overflow-y-auto text-white border border-white rounded-lg"
+                className="absolute w-[80vw] max-w-[350px] h-[60vh] bg-transparent p-4 overflow-y-auto text-white border border-white rounded-lg"
                 onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
             >
                 <h1 className="text-2xl font-bold mb-4">📜 Scrollable Transparent Text</h1>
@@ -47,7 +41,6 @@ export default function TextWall1({ onClose }) {
                     Aenean ac lectus sed lacus tempus tempus. Integer aliquet justo ut turpis cursus, euismod posuere neque ultricies.
                     Ut blandit nulla ut ipsum tristique, id facilisis nunc facilisis. Aliquam erat volutpat.
                 </p>
-                {/* Repeat text blocks to ensure scrolling */}
             </div>
         </div>
     );
