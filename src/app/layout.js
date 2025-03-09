@@ -1,6 +1,18 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
+export default function App({ Component, pageProps }) {
+    return (
+        <>
+            <Head>
+                <link rel="preload" href="/remV1.gif" as="image" type="image/gif" />
+                <link rel="preload" href="/remV2.gif" as="image" type="image/gif" />
+            </Head>
+            <Component {...pageProps} />
+        </>
+    );
+}
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
