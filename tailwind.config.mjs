@@ -11,6 +11,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        tan: ["Tan Mon Cheri", "sans-serif"], // Tan Mon Cheri
+        shs: ["Source Han Sans", "sans-serif"], // 思源黑体
+      },
     },
   },
   plugins: [],

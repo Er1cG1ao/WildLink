@@ -13,10 +13,15 @@ import "swiper/css/navigation";
 export default function About() {
     const [opacity, setOpacity] = useState(1);
     const [isVisible, setIsVisible] = useState(true);
-    const [showScanner, setShowScanner] = useState(false);
-    const [showTextWall2, setShowTextWall2] = useState(false);
+    const [showComponent, setShowComponent] = useState(null);
+    const [hideCarousel, setHideCarousel] = useState(false);
+    const [hideText, setHideText] = useState(false);
+    const [fadeIn, setFadeIn] = useState(false); // Fade-in effect state
 
     useEffect(() => {
+        // Ensure entryImg loads immediately
+        setIsVisible(true);
+
         const fadeTimer = setTimeout(() => {
             setOpacity(0);
         }, 500);
@@ -24,6 +29,11 @@ export default function About() {
         const removeTimer = setTimeout(() => {
             setIsVisible(false);
         }, 1200);
+
+        // Trigger fade-in effect for the rest of the content **1 second later**
+        setTimeout(() => {
+            setFadeIn(true);
+        }, 1000); // Delay increased to 1 second
 
         return () => {
             clearTimeout(fadeTimer);
@@ -33,74 +43,103 @@ export default function About() {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
-            {/* 🔹 Background Wrapper (Ensure Fullscreen) */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                {!showScanner && !showTextWall2 && (
-                    <>
-                        {/* 🔹 Sliding Image (Background - Behind Everything) */}
-                        <div className="absolute top-0 left-0 w-full h-full z-0 flex items-center justify-center">
-                            <Image
-                                src="/Sliding.svg"
-                                alt="Sliding Foreground"
-                                fill
-                                className="object-contain"
-                            />
+            <div className="relative w-full max-w-md aspect-[9/16]">
+                {/* Apply fade-in effect to all content except entryImg */}
+                <div className={`transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}>
+                    {/* 背景容器：包含 Sliding.svg 与文字 */}
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute inset-0 z-20 flex items-center justify-center">
+                            <div className="w-full max-w-[600px] h-full py-16 px-10 text-left">
+                                <h1 className="font-tan text-6xl text-white mb-3">Wild Link</h1>
+                                {!hideText && (
+                                    <>
+                                        <p className="font-shs text-xl text-white mb-1">新型动物互动手链</p>
+                                        <p className="font-shs text-xl text-white mb-3">
+                                            New Interactive Animal Bracelets
+                                        </p>
+                                        <div className="w-100 h-1 bg-white mb-6"></div>
+                                    </>
+                                )}
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        {/* 🔹 Swiper Video Carousel (Set Above Sliding.png & Interactive) */}
-                        <div className="absolute top-0 left-0 w-full h-full z-10 pointer-events-auto">
-                            <Swiper
-                                spaceBetween={10}
-                                slidesPerView={1}
-                                loop={true}
-                                autoplay={{ delay: 5000, disableOnInteraction: false }}
-                                pagination={{ clickable: true }}
-                                navigation={true}
-                                modules={[Autoplay, Pagination, Navigation]}
-                                className="w-full h-full"
-                            >
-                                <SwiperSlide>
-                                    <Image
-                                        src="/remV1.gif"
-                                        alt="GIF 1"
-                                        fill
-                                        className="object-contain cursor-pointer"
-                                        unoptimized
-                                        onClick={() => setShowScanner(true)}
-                                    />
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <Image
-                                        src="/remV2.gif"
-                                        alt="GIF 2"
-                                        fill
-                                        className="object-contain cursor-pointer"
-                                        unoptimized
-                                        onClick={() => setShowTextWall2(true)}
-                                    />
-                                </SwiperSlide>
-                            </Swiper>
-                        </div>
-                    </>
+                {/* 渐隐的 Entry Image (Now Preloaded & Instantly Visible) */}
+                {isVisible && (
+                    <Image
+                        src="/entryImg.svg"
+                        alt="Wild Link"
+                        fill
+                        priority // Preload the image so there's no delay
+                        className="absolute z-50 transition-opacity duration-700 object-contain"
+                        style={{ opacity }}
+                    />
                 )}
             </div>
 
-            {/* 🔹 Entry Image (Fades Out) */}
-            {isVisible && (
-                <Image
-                    src="/entryImg.svg"
-                    alt="Wild Link"
-                    fill
-                    className="absolute z-50 transition-opacity duration-700 object-contain"
-                    style={{ opacity }}
-                />
+            {/* Hide video carousel when a component is shown */}
+            {!hideCarousel && (
+                <div className={`absolute inset-0 z-10 pointer-events-auto transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}>
+                    <Swiper
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        loop={true}
+                        autoplay={{ delay: 5000, disableOnInteraction: false }}
+                        pagination={{ clickable: true }}
+                        navigation={true}
+                        modules={[Autoplay, Pagination, Navigation]}
+                        className="w-full h-full"
+                    >
+                        <SwiperSlide>
+                            <Image
+                                src="/remV1.gif"
+                                alt="GIF 1"
+                                fill
+                                className="object-contain cursor-pointer"
+                                unoptimized
+                                onClick={() => {
+                                    setShowComponent("scanner");
+                                    setHideCarousel(true);
+                                }}
+                            />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <Image
+                                src="/remV2.gif"
+                                alt="GIF 2"
+                                fill
+                                className="object-contain cursor-pointer"
+                                unoptimized
+                                onClick={() => {
+                                    setShowComponent("textwall");
+                                    setHideCarousel(true);
+                                    setHideText(true);
+                                }}
+                            />
+                        </SwiperSlide>
+                    </Swiper>
+                </div>
             )}
 
-            {/* 🔹 Scanner Component */}
-            {showScanner && <Scanner onClose={() => setShowScanner(false)} />}
-
-            {/* 🔹 TextWall2 Component */}
-            {showTextWall2 && <TextWall2 onClose={() => setShowTextWall2(false)} />}
+            {/* Conditionally render components */}
+            {showComponent === "scanner" && (
+                <Scanner
+                    onClose={() => {
+                        setShowComponent(null);
+                        setHideCarousel(false);
+                    }}
+                />
+            )}
+            {showComponent === "textwall" && (
+                <TextWall2
+                    onClose={() => {
+                        setShowComponent(null);
+                        setHideCarousel(false);
+                        setHideText(false);
+                    }}
+                />
+            )}
         </div>
     );
 }

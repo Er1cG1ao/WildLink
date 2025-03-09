@@ -16,20 +16,18 @@
 
 body {
   color: var(--foreground);
-  /*background: var(--background);*/
-  font-family: Arial, Helvetica, sans-serif;
-  /* Apply a gradient background to the entire app */
+  font-family: "Tan Mon Cheri", "Source Han Sans", sans-serif;
   background: linear-gradient(to bottom, #2E7986, #AEDFFE);
   min-height: 100vh;
 }
 @keyframes fast-gif {
   0% { transform: scale(1); }
-  50% { transform: scale(1.05); } /* Slight zoom effect */
+  50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 
 .fast-gif {
-  animation: fast-gif 0.3s infinite linear; /* Faster loop */
+  animation: fast-gif 0.3s infinite linear;
 }
 /* Prevent scrolling on all pages */
 html, body {
@@ -38,4 +36,17 @@ html, body {
   margin: 0;
   padding: 0;
   touch-action: none; /* Prevent touch scrolling */
+}
+@font-face {
+  font-family: "Tan Mon Cheri";
+  src: url("/fonts/TanMonCheri.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Source Han Sans";
+  src: url("/fonts/SourceHanSans.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
 }
